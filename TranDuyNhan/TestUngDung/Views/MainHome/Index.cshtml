@@ -1,0 +1,113 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<ModelEF.Model.Product>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Sản phẩm công nghệ</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/Assets/Main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Main/css/style.css" type="text/css">
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+</head>
+
+<body>
+    @RenderPage("Header.cshtml")
+
+    <!-- Header Section Begin -->
+    @RenderPage("Session.cshtml")
+    <!-- Header Section End -->
+    <!-- Hero Section Begin -->
+    <!-- Hero Section End -->
+    <!-- Categories Section Begin -->
+    <!-- Categories Section End -->
+    <!-- Featured Section Begin -->
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Sản phẩm phổ biến</h2>
+                    </div>
+                    <div class="featured__controls">
+                        <ul>
+                            <li class="" data-filter="*"><a href="home" style="color:black;">Tất cả</a></li>
+                            @foreach (var item in ViewBag.CategoryList)
+                            {
+                                <li class=""><a href="#" style="color:black;">@item.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row featured__filter" >
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                        <div class="featured__item">
+                            <div class="featured__item__pic set-bg" data-setbg="@item.Image">
+                                <ul class="featured__item__pic__hover">
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a href=""><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="featured__item__text">
+                                <h6><a href="">@item.Name</a></h6>
+                                <h5>@System.String.Format("{0:0,000 VNĐ}", @item.UnitCost)</h5>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="section-title">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString, @class = "btn btn-primary" }))
+        </div>
+        
+    </section>
+    <!-- Featured Section End -->
+    <!-- Banner Begin -->
+    <!-- Banner End -->
+    <!-- Latest Product Section Begin -->
+    <!-- Latest Product Section End -->
+    <!-- Blog Section Begin -->
+    <!-- Blog Section End -->
+    <!-- Footer Section Begin -->
+    @RenderPage("Footer.cshtml")
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script src="~/Assets/Main/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Assets/Main/js/bootstrap.min.js"></script>
+    <script src="~/Assets/Main/js/jquery.nice-select.min.js"></script>
+    <script src="~/Assets/Main/js/jquery-ui.min.js"></script>
+    <script src="~/Assets/Main/js/jquery.slicknav.js"></script>
+    <script src="~/Assets/Main/js/mixitup.min.js"></script>
+    <script src="~/Assets/Main/js/owl.carousel.min.js"></script>
+    <script src="~/Assets/Main/js/main.js"></script>
+
+
+
+</body>
+
+</html>

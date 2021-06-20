@@ -1,0 +1,82 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<ModelEF.Model.UserAccount>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-wrapper">
+    <!-- Page-body start -->
+    <div class="page-body">
+        <!-- Basic table card start -->
+        <!-- Hover table card end -->
+        <!-- Contextual classes table starts -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Quản lý tài khoản</h5>
+                <div class="card-header-right">
+                    <ul class="list-unstyled card-option">
+                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
+                        <li><i class="fa fa-window-maximize full-card"></i></li>
+                        <li><i class="fa fa-minus minimize-card"></i></li>
+                        <li><i class="fa fa-refresh reload-card"></i></li>
+                        <li><i class="fa fa-trash close-card"></i></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="card-block table-border-style">
+                @using (Html.BeginForm("Index", "UserAccount", FormMethod.Get))
+                {
+                    <div class="row">
+                        <div class="col-xl-6 col-md-6">
+                            <input type="text" value="@ViewBag.SearchString" name="searchString" placeholder="Nhập từ khóa tìm kiếm" class="form-control">
+                        </div>
+                        <div class="col-xl-2 col-md-6">
+                            <input type="submit" value="Tìm kiếm" class="btn btn-info" />
+                        </div>
+                    </div>
+                }
+                <div class="table-responsive">
+                    <table class="table" style="margin-top:20px;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên tài khoản</th>
+                                <th>Mật khẩu</th>
+                                <th style="text-align:center;">Trạng thái</th>
+                                <th  align="center" style="text-align:center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="row_@item.ID">
+                                    <td>@item.ID</td>
+                                    <td>@item.Username</td>
+                                    <td>@item.Password</td>
+                                    <td style="text-align:center;">@item.Status</td>
+                                    @{var status = "";if (@item.Status != "Blocked") { status = "pointer-events: none; color :darkgrey;"; } }
+                                    <td align="center" >
+                                        @Ajax.ActionLink(" ", "Delete", new { @id = item.ID }, new AjaxOptions
+                                   {
+                                       Confirm = "Bạn có muốn xóa tài khoản "+item.Username+" này?",
+                                       OnComplete = "$('#row_" + item.ID + "').remove();",
+                                       HttpMethod = "Delete"
+                                   }, new { @class = "fa fa-trash",@style = status })
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString, @class = "btn btn-primary" }))
+                </div>
+            </div>
+        </div>
+        <!-- Contextual classes table ends -->
+    </div>
+    <!-- Page-body end -->
+</div>
+
+

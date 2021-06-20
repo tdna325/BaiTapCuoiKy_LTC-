@@ -1,0 +1,133 @@
+﻿@model ModelEF.Model.Product
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="page-wrapper">
+
+        <!-- Page body start -->
+        <div class="page-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Basic Form Inputs card start -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Chi tiết sản phẩm</h5>
+                        </div>
+                        <div class="card-block">
+                            <h4 class="sub-title">@Html.DisplayFor(model => model.Name)</h4>
+                            <form>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(model => model.ID, new { @class = "form-control", @style = "color: black" })
+                                        @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @style = "color: black" })
+                                        @Html.ValidationMessageFor(model => model.Name, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.UnitCost, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(model => model.UnitCost, new { @class = "form-control", @style = "color: black" })
+                                        @Html.ValidationMessageFor(model => model.UnitCost, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control", @style = "color: black" })
+                                        @Html.ValidationMessageFor(model => model.Quantity, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Category_ID, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.DropDownListFor(model => model.Category_ID, (IEnumerable<SelectListItem>)ViewBag.CategoryList,"--- Chọn loại sản phẩm---" ,new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Category_ID, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @style = "color: black" })
+                                        @Html.ValidationMessageFor(model => model.Description, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.Label("Url Image", htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(model => model.Image, new { @class = "form-control", @style = "color: black", @name = "picture", @id = "picture" })
+                                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                                        <input type="file" accept="image/*" id="fileUpload" name="fileUpload" style="display:none" />
+                                        <input type="button" id="btnUpLoad" class="btn btn-file" value="Chọn ảnh" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                    <div class="col-sm-10">
+                                        <img id="pictureUpload" width="100" />
+                                        @Html.ValidationMessageFor(model => model.Image, ViewBag.CanhBao as String, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                @Html.ActionLink("Quay lại", "Index", "Product", new { @class = "btn btn-primary" })
+                                <input type="submit" value="Thêm sản phẩm" class="btn btn-danger" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Basic Form Inputs card end -->
+            </div>
+        </div>
+    </div>
+}
+    @section upload
+{
+        <script>
+
+            $('#btnUpLoad').click(function () {
+                $('#fileUpload').trigger('click');
+            });
+            $('#fileUpload').change(function () {
+                if (window.FormData !== undefined) {
+                    var fileUpload = $('#fileUpload').get(0);
+                    var files = fileUpload.files;
+                    var formData = new FormData();
+                    formData.append('file', files[0]);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/Product/Upload',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (urlImage) {
+                                $('#pictureUpload').attr('src', urlImage);
+                                $('#picture').val(urlImage);
+                            },
+                            error: function () {
+                                alert('Có lỗi khi upload: ' + err.statusText);
+                            },
+                        }
+                    );
+                }
+            });
+        </script>
+    }
+
+
